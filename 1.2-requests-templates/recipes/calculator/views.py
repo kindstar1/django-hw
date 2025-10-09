@@ -28,3 +28,14 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+
+def res(request, point, serverings=1):
+    recipe = DATA.get(point, None)
+    new_recipe = {}
+    for key, value in recipe.items():
+        new_recipe[key]=value*serverings
+    context = {
+        'servings': serverings,
+        'recipe': new_recipe,
+        }
+    return render(request, 'calculator/index.html', context)
