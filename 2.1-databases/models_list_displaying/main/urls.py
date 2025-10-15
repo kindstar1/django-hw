@@ -15,6 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+import debug_toolbar
+from django.conf import settings
+from django.urls import include, path
 
 from books.views import books_view, date_pub_view
 
@@ -22,4 +25,5 @@ urlpatterns = [
     path('books/', books_view, name='books'),
     path('admin/', admin.site.urls),
     path('books/<publish>', date_pub_view, name='pub_date_book'),
+    path('__debug__/', include(debug_toolbar.urls)),
 ]

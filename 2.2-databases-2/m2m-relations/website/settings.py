@@ -73,14 +73,20 @@ TEMPLATES = [
 WSGI_APPLICATION = 'website.wsgi.application'
 
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'netology_m2m_relations',
         'HOST': '127.0.0.1',
         'PORT': '5432',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'OPTIONS': {
+            'options': '-c client_encoding=UTF8'
+        }
     }
-}
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
