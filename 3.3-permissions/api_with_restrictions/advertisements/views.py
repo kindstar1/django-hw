@@ -1,15 +1,17 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from advertisements.serializers import  AdvertisementSerializer
+from rest_framework.throttling import AnonRateThrottle
+from advertisements.models import Advertisement
+from advertisements.permissions import IsOwnerOrReadOnly
+from advertisements.filters import AdvertisementFilter
 
 
 class AdvertisementViewSet(ModelViewSet):
     """ViewSet для объявлений."""
-
-    # TODO: настройте ViewSet, укажите атрибуты для кверисета,
-    #   сериализаторов и фильтров
-
-    def get_permissions(self):
-        """Получение прав для действий."""
-        if self.action in ["create", "update", "partial_update"]:
-            return [IsAuthenticated()]
-        return []
+    queryset = Advertisement.objects.all()
+    serializer_class = AdvertisementSerializer
+    throttle_classes = [AnonRateThrottle]
+    filterset_class = AdvertisementFilter
+    permission_classes = [IsOwnerOrReadOnly]
+ 

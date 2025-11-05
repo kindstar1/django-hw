@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from advertisements.models import Advertisement
-
+from advertisements.models import Advertisement, AdvertisementStatusChoices
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer для пользователя."""
@@ -27,7 +26,6 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Метод для создания"""
-
         # Простановка значения поля создатель по-умолчанию.
         # Текущий пользователь является создателем объявления
         # изменить или переопределить его через API нельзя.
@@ -39,7 +37,13 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """Метод для валидации. Вызывается при создании и обновлении."""
-
-        # TODO: добавьте требуемую валидацию
-
+        if data.get('status') != 'CLOSED':
+            user = self.context['request'].user
+            queryset = Advertisement.objects.filter(creator=user, status='OPEN')
+            if self.instance:
+                queryset = queryset.exclude(pk=self.instance.pk)
+            count_adds = queryset.count()
+            if count_adds >= 10:
+                raise serializers.ValidationError('Невозможно создать более 10-ти открытых объявлений')
         return data
+       
