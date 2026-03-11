@@ -83,6 +83,7 @@ jobs:
             git reset --hard origin/video
             cd 3.2-crud/stocks_products
             source .venv/bin/activate
+            set -a && source /etc/stocks_products.env && set +a
             pip install -r requirements-server.txt --quiet 2>/dev/null || pip install -r requirements.txt --quiet
             python manage.py migrate --noinput
             python manage.py collectstatic --noinput
